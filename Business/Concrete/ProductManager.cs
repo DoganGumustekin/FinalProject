@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspects.Autofac;
 using Business.CCS;
 using Business.Constans;
 using Business.ValidationRules.FluentValidation;
@@ -31,6 +32,8 @@ namespace Business.Concrete
             _categoryService = categoryService;
         }
 
+
+
         public IDataResult<List<Product>> GetAll()
         {
             if (DateTime.Now.Hour == 2)
@@ -40,20 +43,29 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Product>>(_productDal.GetAll(), Messages.ProductListed); //ben dataresult döndürüyorum al çalıştığım tip budur buda döndürdüğüm datadır ekstra işlem sonucu ve mesajım.
         }
 
+
+
         public IDataResult<List<Product>> GetAllByCategoryId(int Id)
         {
             return new SuccessDataResult<List<Product>>(_productDal.GetAll(p => p.CategoryId == Id));
         }
+
+
 
         public IDataResult<Product> GetById(int productId)
         {
             return new SuccessDataResult<Product>(_productDal.Get(p => p.ProductId == productId));
         }
 
+
+
         public IDataResult<List<Product>> GetByUnitPrice(decimal min, decimal max)
         {
             return new SuccessDataResult<List<Product>>(_productDal.GetAll(p => p.UnitPrice >= min && p.UnitPrice <= max));
         }
+
+
+
 
         public IDataResult<List<ProductDetailDto>> GetProductDetails()
         {
@@ -64,6 +76,10 @@ namespace Business.Concrete
             return new SuccessDataResult<List<ProductDetailDto>>(_productDal.GetProductDetails());
         }
 
+
+
+
+        [SecuredOperation("product.add")]
         [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {
@@ -74,16 +90,27 @@ namespace Business.Concrete
             {
                 return result;
             }
-            _productDal.Add(product); //burada eğer bu adımı geçerse alttaki new resultu çalıştıracak buda ben burada add ledim 
-            return new SuccessResult(Messages.ProductAdded); //demek oluyor.
-
+            _productDal.Add(product); //burada eğer bu adımı geçerse alttaki new resultu çalıştıracak
+            return new SuccessResult(Messages.ProductAdded);
         }
+
+
+
 
         [ValidationAspect(typeof(ProductValidator))]
         public IResult Update(Product product)
         {
-            throw new NotImplementedException();
+            var result = BusinessRules.Run(CheckIfProductCountOfCategoryCorrect(product.CategoryId));
+            if (result!=null)
+            {
+                return result;
+            }
+            _productDal.Add(product);
+            return new SuccessResult(Messages.ProductUpdated);
         }
+
+
+
 
         private IResult CheckIfProductCountOfCategoryCorrect(int categoryId)
         {
@@ -95,6 +122,9 @@ namespace Business.Concrete
             return new SuccessResult(); //her seferinde mesaj döndürmemeliyiz. 
         }
 
+
+
+
         private IResult CheckIfProductNameExists(string productName)
         {
             var result = _productDal.GetAll(p => p.ProductName == productName).Any(); //ürün isimlerinde benim gönerdiğim ürün ismi varmı?
@@ -105,6 +135,9 @@ namespace Business.Concrete
             }
             return new SuccessResult();
         }
+
+
+
 
         private IResult CheckIfCategoryLimitExceded()
         {
