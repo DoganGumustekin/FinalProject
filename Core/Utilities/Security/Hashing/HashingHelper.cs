@@ -19,7 +19,7 @@ namespace Core.Utilities.Security.Hashing
         }
 
         //buradaki str password kullanıcının tekrar giriş yapmak için kullandığı parola. 
-        public static bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        public static bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt) //out yok çükü buraya salt ve hash değerini ben vereceğm.
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
             {
@@ -31,8 +31,9 @@ namespace Core.Utilities.Security.Hashing
                         return false;
                     }
                 }
-                return true;
+                
             }
+            return true;
         }
     }
 }

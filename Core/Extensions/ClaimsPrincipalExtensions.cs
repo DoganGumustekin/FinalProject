@@ -18,7 +18,7 @@ namespace Core.Extensions
 
         public static List<string> ClaimRoles(this ClaimsPrincipal claimsPrincipal) //çoğunlukla roller lazım
         {
-            return claimsPrincipal?.Claims(ClaimTypes.Role);
+            return claimsPrincipal?.Claims(ClaimTypes.Role); //direk claimPrincipal.claimroles dediğmde direk rolleri döndür.
         }
     }
 }

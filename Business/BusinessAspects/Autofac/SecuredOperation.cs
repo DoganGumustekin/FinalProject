@@ -11,7 +11,7 @@ using Castle.DynamicProxy;
 using Business.Constans;
 using Core.Extensions;
 
-namespace Business.BusinessAspects.Autofac
+namespace Business.BusinessAspects.Autofac //add methodu içine if yetkisi varmı yokmu yu çalıştırmam lazım ama ben her method için bunu yazmamalıyım o yüzden bu aspect i yazıyorum.
 {
     public class SecuredOperation : MethodInterception
     {

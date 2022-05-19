@@ -11,7 +11,7 @@ namespace Core.Utilities.Security.Encryption
     {
         public static SecurityKey CreateSecurityKey(string securityKey) //SecurityKey api deki appsettings ten geliyor 
         {                                                               //securityKey ise o SecurityKey in karşılığı.
-            return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey)); //securitykey i simetrik anahtar haline getir. 
+            return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(securityKey)); //byte değerini alıp onu bir (securitykeyi) simetrik anahtar haline getir. 
         }
     }
 }

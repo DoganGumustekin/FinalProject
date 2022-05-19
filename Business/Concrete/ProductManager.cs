@@ -51,7 +51,7 @@ namespace Business.Concrete
         }
 
 
-
+        [SecuredOperation("admin")]
         public IDataResult<Product> GetById(int productId)
         {
             return new SuccessDataResult<Product>(_productDal.Get(p => p.ProductId == productId));
@@ -79,7 +79,7 @@ namespace Business.Concrete
 
 
 
-        [SecuredOperation("product.add")]
+        [SecuredOperation("product.add,admin")]
         [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {

@@ -15,4 +15,4 @@ namespace DataAccess.Abstract
     }
 }
 //önemli not: eğer farklı veri erişim tekniklerini kullanma ihtimalim varsa
-//Data access te concrete de folderlama (concerte ye yeni klasör ekleme) yapıyoruz.
+//Data access te concrete concerte ye yeni klasör ekleme yapıyoruz.

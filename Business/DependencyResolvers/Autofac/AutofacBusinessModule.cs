@@ -33,7 +33,6 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<AuthManager>().As<IAuthService>();
             builder.RegisterType<JwtHelper>().As<ITokenHelper>();
 
-            builder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>();
 
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly(); //çalışan uygulama içerisinde 
@@ -43,7 +42,7 @@ namespace Business.DependencyResolvers.Autofac
                 {
                     Selector = new AspectInterceptorSelector() //onlar için aspectinterceptorselector u çağır. 
                 }).SingleInstance();                            //autofac bizim bütün sınıflarımız için önce bunu
-                                                                //çalıştırır bu damın aspect i varmı
+                                                                //çalıştırır bu adamın aspect i varmı
         }
     }
 }

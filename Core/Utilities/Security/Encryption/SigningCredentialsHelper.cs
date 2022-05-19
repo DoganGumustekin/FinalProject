@@ -13,7 +13,8 @@ namespace Core.Utilities.Security.Encryption
         {
             //sen bir hashing yapacaksın senin algoritman bu anahtarında bu.
             //security anahtarını kullan şifreleme olarak da sha512 algoritmasını kullan.
-            return new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
+            return new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512Signature); 
+            //asp.net e de keyimi ve kullanacağım algoritmayı söylemem gerekiyor.
         }
     }
 }

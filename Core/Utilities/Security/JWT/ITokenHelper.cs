@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Core.Utilities.Security.JWT
 {
-    public interface ITokenHelper
+    public interface ITokenHelper//accestoken i oluşturacak yapıya ihtiyacım var. ilgili kullanıcı için claimlerini içerecek bir token üretir.
     {
         AccessToken CreateToken(User user, List<OperationClaim> operationClaims);
         //test yaparken uyduruk bir token oluşturabilirim. veya bunu başka bir teknikle üretmek isteyebilirim o yüzden createtoken

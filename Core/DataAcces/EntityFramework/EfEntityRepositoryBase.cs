@@ -7,7 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-    
+
 namespace Core.DataAcces.EntityFramework
 {
     public class EfEntityRepositoryBase<TEntity,TContext>:IEntityRepository<TEntity> //TEntity tablomuza karşılık geliyordu bende burda diyorum ki ben hangi tabloyu verirsem onun ientityrepository si çalışacak.

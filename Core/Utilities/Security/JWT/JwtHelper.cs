@@ -24,6 +24,7 @@ namespace Core.Utilities.Security.JWT
             _tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>(); //configuration(appsettings) bölümü tokenoptions bölümünü al.
                                                                                           //appsettings teki nesneleri tokenoptionstaki objelere tek tek at.
         }
+
         public AccessToken CreateToken(User user, List<OperationClaim> operationClaims) //bana user ve claimleri ver ben bunlara göre bir token oluşturayım.
         {
             _accessTokenExpiration = DateTime.Now.AddMinutes(_tokenOptions.AccessTokenExpiration); //10 dk yazmıştık appsettingse onu atıyoruz.
@@ -38,7 +39,6 @@ namespace Core.Utilities.Security.JWT
                 Token = token,
                 Expiration = _accessTokenExpiration
             };
-
         }
 
         public JwtSecurityToken CreateJwtSecurityToken(TokenOptions tokenOptions, User user,
@@ -48,8 +48,8 @@ namespace Core.Utilities.Security.JWT
                 issuer: tokenOptions.Issuer,
                 audience: tokenOptions.Audience,         //burada bulunan bütün bilgileri oluşturuyoruz. 
                 expires: _accessTokenExpiration,
-                notBefore: DateTime.Now,
-                claims: SetClaims(user, operationClaims), //claimler bizim için önemli onlar içinde bir method yaptım. setclaims
+                notBefore: DateTime.Now,                 //şu andan önceki bir değer verilemez.
+                claims: SetClaims(user, operationClaims), //claimler bizim için önemli onlar içinde bir method yaptım. setclaims kullanıcı bilgisi ve claimlerini alarak bana bir tane claim listesi oluştur.
                 signingCredentials: signingCredentials
             );
             return jwt;
@@ -65,7 +65,7 @@ namespace Core.Utilities.Security.JWT
             claims.AddName($"{user.FirstName} {user.LastName}");//burdaki kullanım iki tane str yi yanyana göstermek için kullanılır başına $ eklersem içine kod yazabiliyorum. 
             claims.AddRoles(operationClaims.Select(c => c.Name).ToArray()); //kullanıcının veritabanından çektiğim claimlerinin(rolleri) namelerini çekip arreye basıp rolleri ekliyorum.
 
-            return claims;  
+            return claims;
         }
     }
 }
