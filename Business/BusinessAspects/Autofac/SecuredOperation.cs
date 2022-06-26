@@ -37,5 +37,6 @@ namespace Business.BusinessAspects.Autofac //add methodu içine if yetkisi varm�
             }
             throw new Exception(Messages.AuthorizationDenied); //yoksa yetkin yok hatası ver
         }
+        //https://github.com/ismailkaygisiz/ArtChitecture/blob/main/Core/Utilities/Interceptors/MethodInterception.cs
     }
 }

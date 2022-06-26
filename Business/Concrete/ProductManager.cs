@@ -3,6 +3,8 @@ using Business.BusinessAspects.Autofac;
 using Business.CCS;
 using Business.Constans;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Transaction;
 using Core.Aspects.Autofac.Validation;
 using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Business;
@@ -33,7 +35,7 @@ namespace Business.Concrete
         }
 
 
-
+        [CacheAspect]
         public IDataResult<List<Product>> GetAll()
         {
             if (DateTime.Now.Hour == 2)
@@ -43,15 +45,15 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Product>>(_productDal.GetAll(), Messages.ProductListed); //ben dataresult döndürüyorum al çalıştığım tip budur buda döndürdüğüm datadır ekstra işlem sonucu ve mesajım.
         }
 
-
-
+        
+        
         public IDataResult<List<Product>> GetAllByCategoryId(int Id)
         {
             return new SuccessDataResult<List<Product>>(_productDal.GetAll(p => p.CategoryId == Id));
         }
 
-
-        [SecuredOperation("admin")]
+        [CacheAspect]
+        //[SecuredOperation("admin")]
         public IDataResult<Product> GetById(int productId)
         {
             return new SuccessDataResult<Product>(_productDal.Get(p => p.ProductId == productId));
@@ -79,8 +81,9 @@ namespace Business.Concrete
 
 
 
-        [SecuredOperation("product.add,admin")]
+        //[SecuredOperation("product.add,admin")]
         [ValidationAspect(typeof(ProductValidator))]
+        [CacheRemoveAspect("IProductService.Get")]
         public IResult Add(Product product)
         {
             IResult result = BusinessRules.Run(CheckIfProductNameExists(product.ProductName),
@@ -98,6 +101,9 @@ namespace Business.Concrete
 
 
         [ValidationAspect(typeof(ProductValidator))]
+        [CacheRemoveAspect("IProductService.Get")]//sadece get yazarsam bellketeki içinde get geçen tüm keyleri iptal et
+                                                  //o yüzden IProductService deki bütün getleri sil.
+                                                  //ürünü güncellediğim zaman uçur.
         public IResult Update(Product product)
         {
             var result = BusinessRules.Run(CheckIfProductCountOfCategoryCorrect(product.CategoryId));
@@ -147,6 +153,14 @@ namespace Business.Concrete
                 return new ErrorResult(Messages.CategoryLimitExceded);
             }
             return new SuccessResult();
+        }
+
+        [TransactionScopeAspect]
+        public IResult TransactionalOperation(Product product)
+        {
+            _productDal.Update(product);
+            _productDal.Add(product);
+            return new SuccessResult(Messages.ProductUpdated);
         }
     }
 }

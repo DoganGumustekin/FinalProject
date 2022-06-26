@@ -27,6 +27,10 @@ services.AddControllers();
 // configure strongly typed settings object
 services.Configure<TokenOptions>(builder.Configuration.GetSection("TokenOptions"));
 
+
+
+//buraya AddDependencyResolvers ý alayým istediðim kadar modülü ekliyebileyim istiyorum.
+//coremodule gibi farklý servicetool yazdýðýmda onu da eklerim. 
 services.AddDependencyResolvers(new ICoreModule[] {
     new CoreModule()
 });
@@ -34,7 +38,8 @@ services.AddDependencyResolvers(new ICoreModule[] {
 builder.Services.AddControllers();
 
 var app = builder.Build();
-
+app.UseAuthentication();
+app.UseAuthorization();
 
 
 //var tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
@@ -65,8 +70,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
+
 
 app.UseEndpoints(endpoints =>
 {
